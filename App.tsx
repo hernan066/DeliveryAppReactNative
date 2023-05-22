@@ -1,85 +1,20 @@
-import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import { RoundedButton } from "./src/Presentation/components/RondedButton";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { HomeScreen } from "./src/Presentation/view/home/Home";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Image source={require("./assets/logo.jpeg")} style={styles.imageBack} />
-      <View style={styles.loginForm}>
-        <Text style={styles.title}>Ingresar</Text>
-        <View style={styles.textInputContainer}>
-          <Image
-            source={require("./assets/user.png")}
-            style={styles.iconImage}
-          />
-          <TextInput style={styles.textInput} placeholder="Ingresa tu correo" />
-        </View>
-        <View style={styles.textInputContainer}>
-          <Image
-            source={require("./assets/password.png")}
-            style={styles.iconImage}
-          />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Ingresa tu contraseña"
-          />
-        </View>
-        <RoundedButton
-          text={"ENVIAR"}
-          onPress={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+        {/*  <Stack.Screen name="Profile" component={ProfileScreen} /> */}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ff4136",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  imageBack: {
-    width: "100%",
-    height: "70%",
-    position: "relative",
-    top: -130,
-  },
-  loginForm: {
-    position: "absolute",
-    width: "100%",
-    height: "38%",
-    backgroundColor: "#fff",
-    bottom: 0,
-    borderTopStartRadius: 40,
-    borderTopEndRadius: 40,
-    padding: 20,
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 25,
-  },
-  textInput: {
-    flex: 1,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
-    padding: 5,
-    marginBottom: 25,
-  },
-  textInputContainer: {
-    flexDirection: "row",
-    gap: 7,
-  },
-  iconImage: {
-    width: 30,
-    height: 30,
-    marginTop: 5,
-  },
-});
