@@ -1,7 +1,53 @@
-import { Text, TextInput, Image, View, StyleSheet } from "react-native";
+import { Text, Image, View, StyleSheet, ToastAndroid } from "react-native";
 import { RoundedButton } from "../../components/RondedButton";
+import useViewModel from "./ViewModel";
+import { CustomTextInput } from "../../components/CustomTextInput";
+import { useEffect } from "react";
 
 export const HomeScreen = () => {
+  const { email, password, onChange, errorMessage, login } = useViewModel();
+
+  useEffect(() => {
+    if (errorMessage !== "") {
+      ToastAndroid.show(errorMessage, ToastAndroid.LONG);
+    }
+  }, [errorMessage]);
+
+  /* useEffect(() => {      
+    if (user?.id !== null && user?.id !== undefined && user?.id !== '') {
+        
+        registerForPushNotificationsAsync().then(token => {
+
+            console.log('TOKEN: ' + token);
+
+            updateNotificationToken(user?.id!, token!);
+
+            if (user.roles?.length! > 1) {
+                navigation.replace('RolesScreen');
+            }
+            else {
+                navigation.replace('ClientTabsNavigator');
+            }
+
+        });
+
+        // This listener is fired whenever a notification is received while the app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        });
+
+        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response);
+        });
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
+        };
+    }
+}, [user]) */
+
   return (
     <View style={styles.container}>
       <Image
@@ -10,29 +56,25 @@ export const HomeScreen = () => {
       />
       <View style={styles.loginForm}>
         <Text style={styles.title}>Ingresar</Text>
-        <View style={styles.textInputContainer}>
-          <Image
-            source={require("../../../../assets/user.png")}
-            style={styles.iconImage}
-          />
-          <TextInput style={styles.textInput} placeholder="Ingresa tu correo" />
-        </View>
-        <View style={styles.textInputContainer}>
-          <Image
-            source={require("../../../../assets/password.png")}
-            style={styles.iconImage}
-          />
-          <TextInput
-            style={styles.textInput}
-            placeholder="Ingresa tu contraseña"
-          />
-        </View>
-        <RoundedButton
-          text={"ENVIAR"}
-          onPress={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+
+        <CustomTextInput
+          image={require("../../../../assets/user.png")}
+          placeholder="Ingresa tu correo"
+          keyboardType="email-address"
+          property="email"
+          onChangeText={onChange}
+          value={email}
         />
+        <CustomTextInput
+          image={require("../../../../assets/password.png")}
+          placeholder="Ingresa tu contraseña"
+          keyboardType="default"
+          property="password"
+          secureTextEntry={true}
+          onChangeText={onChange}
+          value={password}
+        />
+        <RoundedButton text={"ENVIAR"} onPress={() => login()} />
       </View>
     </View>
   );
@@ -55,7 +97,7 @@ const styles = StyleSheet.create({
   loginForm: {
     position: "absolute",
     width: "100%",
-    height: "38%",
+    height: 300,
     backgroundColor: "#fff",
     bottom: 0,
     borderTopStartRadius: 40,
@@ -67,21 +109,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 25,
-  },
-  textInput: {
-    flex: 1,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
-    padding: 5,
-    marginBottom: 25,
-  },
-  textInputContainer: {
-    flexDirection: "row",
-    gap: 7,
-  },
-  iconImage: {
-    width: 30,
-    height: 30,
-    marginTop: 5,
   },
 });
